@@ -76,19 +76,19 @@ Item.defineArmor(488,"blaze_rod",0,"Magic Earth Boots","/images/armor/earth1.png
 
 //Ultimate Mage Armor
 
-Item.defineArmour(489,"blaze_rod",0,"Ultimate Mage Helmet","/images/armor/um1.png",3,9999,ArmorType.helmet);
+Item.defineArmor(489,"blaze_rod",0,"Ultimate Mage Helmet","/images/armor/um1.png",3,9999,ArmorType.helmet);
 
 
 
-Item.defineArmour(490,"blaze_rod",0,"Ultimate Mage Chestplate","/images/armor/um1.png",7,9999,ArmorType.chestpate);
+Item.defineArmor(490,"blaze_rod",0,"Ultimate Mage Chestplate","/images/armor/um1.png",7,9999,ArmorType.chestpate);
 
 
 
-Item.defineArmour(491,"blaze_rod",0,"Ultimate Mage Leggings","/images/armor/um2.png",6,9999,ArmorType.leggings);
+Item.defineArmor(491,"blaze_rod",0,"Ultimate Mage Leggings","/images/armor/um2.png",6,9999,ArmorType.leggings);
 
 
 
-Item.defineArmour(492,"blaze_rod",0,"Ultimate Mage Boots","/images/armor/um1.png",4,9999,ArmorType.boots);
+Item.defineArmor(492,"blaze_rod",0,"Ultimate Mage Boots","/images/armor/um1.png",4,9999,ArmorType.boots);
 
 
 
