@@ -1,0 +1,98 @@
+//Water Armor
+
+Item.defineArmor(473,"blaze_rod",0,"Magic Water Helmet","/images/armor/water1.png",3,9999,ArmorType.helmet);
+
+
+
+Item.defineArmor(474,"blaze_rod",0,"Magic Water Chestplate","/images/armor/water1.png",5,9999,ArmorType.chestpate);
+
+
+
+Item.defineArmor(475,"blaze_rod",0,"Magic Water Leggings","/images/armor/water2.png",4,9999,ArmorType.leggings);
+
+
+
+Item.defineArmor(476,"blaze_rod",0,"Magic Water Boots","/images/armor/water1.png",3,9999,ArmorType.boots);
+
+
+
+
+
+//Fire
+
+Item.defineArmor(477,"blaze_rod",0,"Magic Fire Helmet","/images/armor/fire1.png",3,9999,ArmorType.helmet);
+
+
+
+Item.defineArmor(478,"blaze_rod",0,"Magic Fire Chestplate","/images/armor/fire1.png",5,9999,ArmorType.chestpate);
+
+
+
+Item.defineArmor(479,"blaze_rod",0,"Magic Fire Leggings","/images/armor/fire2.png",4,9999,ArmorType.leggings);
+
+
+
+Item.defineArmor(480,"blaze_rod",0,"Magic Fire Boots","/images/armor/fire1.png",3,9999,ArmorType.boots);
+
+
+
+//Air
+
+
+Item.defineArmor(481,"blaze_rod",0,"Magic Air Helmet","/images/armor/air1.png",3,9999,ArmorType.helmet);
+
+
+
+Item.defineArmor(482,"blaze_rod",0,"Magic Air Chestplate","/images/armor/air1.png",5,9999,ArmorType.chestpate);
+
+
+
+Item.defineArmor(483,"blaze_rod",0,"Magic Air Leggings","/images/armor/air2.png",4,9999,ArmorType.leggings);
+
+
+
+Item.defineArmor(484,"blaze_rod",0,"Magic Air Boots","/images/armor/air1.png",3,9999,ArmorType.boots);
+
+
+
+//Earth
+
+Item.defineArmor(485,"blaze_rod",0,"Magic Earth Helmet","/images/armor/earth1.png",3,9999,ArmorType.helmet);
+
+
+
+Item.defineArmor(486,"blaze_rod",0,"Magic Earth Chestplate","/images/armor/earth1.png",5,9999,ArmorType.chestpate);
+
+
+
+Item.defineArmor(487,"blaze_rod",0,"Magic Earth Leggings","/images/armor/earth2.png",4,9999,ArmorType.leggings);
+
+
+
+Item.defineArmor(488,"blaze_rod",0,"Magic Earth Boots","/images/armor/earth1.png",3,9999,ArmorType.boots);
+
+
+
+
+//Ultimate Mage Armor
+
+Item.defineArmour(489,"blaze_rod",0,"Ultimate Mage Helmet","/images/armor/um1.png",3,9999,ArmorType.helmet);
+
+
+
+Item.defineArmour(490,"blaze_rod",0,"Ultimate Mage Chestplate","/images/armor/um1.png",7,9999,ArmorType.chestpate);
+
+
+
+Item.defineArmour(491,"blaze_rod",0,"Ultimate Mage Leggings","/images/armor/um2.png",6,9999,ArmorType.leggings);
+
+
+
+Item.defineArmour(492,"blaze_rod",0,"Ultimate Mage Boots","/images/armor/um1.png",4,9999,ArmorType.boots);
+
+
+
+
+
+
+
