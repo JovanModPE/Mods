@@ -1,0 +1,1061 @@
+const CURRENT_VERSION = "1.0";
+
+var theme = "MCPE"; //Set the default theme (inside of columns); All themes are: Android, MCPE
+
+//-------------------------------Mod--------------------------//
+
+var doorX;
+var doorY;
+var doorZ;
+
+var path = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/games/com.mojang";
+var mcpeButtonIcon = " iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAABhSURBVEhLY9izcTVNEW0tKExNB1kwta2RRkhDXYvGFqhpDnUf0N6C0SAigEZTEUE0mooIotFURBCNpiKCaDQVEUSjqYggGk1FBBEoFRWlpgNDCsgCIy0EwhTErwyrrLoWAI4KV9f/jHdkAAAAAElFTkSuQmCC ";
+var mcpeExitButtonIcon = " iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAAHMSURBVDhPjZDbSgJRFIb3qzgHx3oE38nCySxRyvJQGIFk2IUJBuLUdDQC6XBfN3XVCxgk5Eus1loza9weggY+9t7/+te/1x71fOfD5/tbwEe4/snrAu0NqtUqcNBL/3Kh4T9QSMJZAkUhL30fjsvbTCNcdUgTZj0JZ5kJJ/LnzEylONcomkDTJOI8kQ8UFpiC4s/3kOGz1jgeDWGMun4hhfBEFETP4wI2SkgUFjbQnoJEj4LkaU+35/CIHJW2oIGIURrHo68pTXTxR08bXHswuO5BfbcA9Z08JJPJ6aaZlSAP+xHHTjDqwe8CcbiVi5AwvVnOVNO9ju0w6t7rQL/XgYPCBlMrZHmV/0FPY8KwWj47Ab1xywHbioO66baB2NvMMPu5TBigTRKG8R4hj3gt0wbLsEFdnbXgstOCStaF8no6aoxCFpxprWTT7DcMi1EX7RM4R0prq7Drrga3a830Twh9QoK8hBGzwESUd9oED4OK6RQjP1pCiu4KbC/QSSu6KTANk1Fem4KaXBDIKOagYRI2radwIgMnwqAeT9RkUYpi1Bsm+yCU9wiFBBNhkOu6QTIKcgOPjOusrp91TdEXNYbNUtSNs7qOGTPhF1U7V2AcJE8CAAAAAElFTkSuQmCC "
+
+Base64Decode(android.util.Base64.decode(mcpeButtonIcon, 0), path + "/mcpebutton.png");
+Base64Decode(android.util.Base64.decode(mcpeExitButtonIcon, 0), path + "/mcpeexitbutton.png");
+
+function Base64Decode(byteArray, Path) {
+    try {
+        var File = new java.io.File(Path);
+        if (!File.exists()) {
+            File.createNewFile();
+            var Stream = new java.io.FileOutputStream(File);
+            Stream.write(byteArray);
+            Stream.close();
+        }
+    } catch (err) {
+        print(err);
+    }
+}
+
+var GUI;
+var menu;
+var exitUI;
+
+var mcpeBtn = new android.graphics.BitmapFactory.decodeFile(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/games/com.mojang/mcpebutton.png");
+var mcpeExitBtn = new android.graphics.BitmapFactory.decodeFile(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/games/com.mojang/mcpeexitbutton.png");
+
+var mcpeButtonImage = new android.graphics.drawable.BitmapDrawable(mcpeBtn);
+var mcpeExitButtonImage = new android.graphics.drawable.BitmapDrawable(mcpeExitBtn);
+
+function dip2px(dips){
+var ctx = com.mojang.minecraftpe.MainActivity.currentMainActivity.get();
+return Math.ceil(dips * ctx.getResources().getDisplayMetrics().density);
+}
+
+function openDoorChooseMenu(){
+var ctx = com.mojang.minecraftpe.MainActivity.currentMainActivity.get();
+ctx.runOnUiThread(new java.lang.Runnable({ run: function(){
+try{
+var menuLayout = new android.widget.LinearLayout(ctx);
+var menuScroll = new android.widget.ScrollView(ctx);
+var menuLayout1 = new android.widget.LinearLayout(ctx);
+menuLayout.setOrientation(1);
+menuLayout1.setOrientation(1);
+menuScroll.addView(menuLayout);
+menuLayout1.addView(menuScroll);
+//--------Add Title--------//
+var name = new android.widget.TextView(ctx);
+name.setTextSize(20);
+name.setText("HiddenDoors");//Title
+name.setTextColor(android.graphics.Color.WHITE); //Color
+name.setGravity(android.view.Gravity.CENTER);
+
+menuLayout.addView(name);
+//--------Add Buttons-------//
+var version = new android.widget.TextView(ctx);
+version.setTextSize(15);
+version.setText("v"+CURRENT_VERSION);//Title
+version.setTextColor(android.graphics.Color.WHITE); //Color
+version.setGravity(android.view.Gravity.CENTER);
+
+menuLayout.addView(version);
+
+var craftTitle = new android.widget.TextView(ctx);
+craftTitle.setTextSize(12);
+craftTitle.setText("\nChoose a door");//Title
+craftTitle.setTextColor(android.graphics.Color.WHITE); //Color
+craftTitle.setGravity(android.view.Gravity.CENTER);
+
+menuLayout.addView(craftTitle);
+
+var button = new android.widget.Button(ctx);
+if(theme=="Android"){
+	button.setText("Bookshelf");
+}else if(theme=="MCPE"){
+	button.setText("Bookshelf");
+	button.setBackgroundDrawable(mcpeButtonImage);
+}
+button.setOnClickListener(new android.view.View.OnClickListener({
+onClick: function(viewarg){
+	setDoor(doorX,doorY,doorZ,255);
+	closeMenu();
+}
+}));
+menuLayout.addView(button);
+
+var button1 = new android.widget.Button(ctx);
+if(theme=="Android"){
+	button1.setText("Oak");
+}else if(theme=="MCPE"){
+	button1.setText("Oak");
+	button1.setBackgroundDrawable(mcpeButtonImage);
+}
+
+button1.setOnClickListener(new android.view.View.OnClickListener({
+onClick: function(viewarg){
+	setDoor(doorX,doorY,doorZ,253);
+	closeMenu();
+}
+}));
+menuLayout.addView(button1);
+
+var button2 = new android.widget.Button(ctx);
+if(theme=="Android"){
+	button2.setText("Dirt");
+}else if(theme=="MCPE"){
+	button2.setText("Dirt");
+	button2.setBackgroundDrawable(mcpeButtonImage);
+}
+
+button2.setOnClickListener(new android.view.View.OnClickListener({
+onClick: function(viewarg){
+	setDoor(doorX,doorY,doorZ,251);
+	closeMenu();
+}
+}));
+menuLayout.addView(button2);
+
+var button3 = new android.widget.Button(ctx);
+if(theme=="Android"){
+button3.setText("Cobblestone");
+}else if(theme=="MCPE"){
+button3.setText("Cobblestone");
+button3.setBackgroundDrawable(mcpeButtonImage);
+}
+
+button3.setOnClickListener(new android.view.View.OnClickListener({
+onClick: function(viewarg){
+	setDoor(doorX,doorY,doorZ,249);
+	closeMenu();
+}
+}));
+menuLayout.addView(button3);
+
+var button4 = new android.widget.Button(ctx);
+if(theme=="Android"){
+	button4.setText("Stone Brick");
+}else if(theme=="MCPE"){
+	button4.setText("Stone Brick");
+	button4.setBackgroundDrawable(mcpeButtonImage);
+}
+button4.setOnClickListener(new android.view.View.OnClickListener({
+onClick: function(viewarg){
+	setDoor(doorX,doorY,doorZ,242);
+	closeMenu();
+}
+}));
+menuLayout.addView(button4);
+
+var button5 = new android.widget.Button(ctx);
+if(theme=="Android"){
+ button5.setText("Brick");
+}else if(theme=="MCPE"){
+ button5.setText("Brick");
+ button5.setBackgroundDrawable(mcpeButtonImage);
+}
+button5.setOnClickListener(new android.view.View.OnClickListener({
+onClick: function(viewarg){
+	setDoor(doorX,doorY,doorZ,240);
+	closeMenu();
+}
+}));
+menuLayout.addView(button5);
+
+var button6 = new android.widget.Button(ctx);
+if(theme=="Android"){
+ button6.setText("Quartz");
+}else if(theme=="MCPE"){
+ button6.setText("Quartz");
+ button6.setBackgroundDrawable(mcpeButtonImage);
+}
+button6.setOnClickListener(new android.view.View.OnClickListener({
+onClick: function(viewarg){
+	setDoor(doorX,doorY,doorZ,238);
+	closeMenu();
+}
+}));
+menuLayout.addView(button6);
+
+var button7 = new android.widget.Button(ctx);
+if(theme=="Android"){
+ button7.setText("Plank");
+}else if(theme=="MCPE"){
+ button7.setText("Plank");
+ button7.setBackgroundDrawable(mcpeButtonImage);
+}
+button7.setOnClickListener(new android.view.View.OnClickListener({
+onClick: function(viewarg){
+	setDoor(doorX,doorY,doorZ,236);
+	closeMenu();
+}
+}));
+menuLayout.addView(button7);
+
+var button8 = new android.widget.Button(ctx);
+if(theme=="Android"){
+ button8.setText("Obsidian");
+}else if(theme=="MCPE"){
+ button8.setText("Obsidian");
+ button8.setBackgroundDrawable(mcpeButtonImage);
+}
+button8.setOnClickListener(new android.view.View.OnClickListener({
+onClick: function(viewarg){
+	setDoor(doorX,doorY,doorZ,234);
+	closeMenu();
+}
+}));
+menuLayout.addView(button8);
+
+var button9 = new android.widget.Button(ctx);
+if(theme=="Android"){
+ button9.setText("Stone");
+}else if(theme=="MCPE"){
+ button9.setText("Stone");
+ button9.setBackgroundDrawable(mcpeButtonImage);
+}
+button9.setOnClickListener(new android.view.View.OnClickListener({
+onClick: function(viewarg){
+	setDoor(doorX,doorY,doorZ,232);
+	closeMenu();
+}
+}));
+menuLayout.addView(button9);
+
+var button10 = new android.widget.Button(ctx);
+if(theme=="Android"){
+ button10.setText("Spruce");
+}else if(theme=="MCPE"){
+ button10.setText("Spruce");
+ button10.setBackgroundDrawable(mcpeButtonImage);
+}
+button10.setOnClickListener(new android.view.View.OnClickListener({
+onClick: function(viewarg){
+	setDoor(doorX,doorY,doorZ,230);
+	closeMenu();
+}
+}));
+menuLayout.addView(button10);
+
+var button11 = new android.widget.Button(ctx);
+if(theme=="Android"){
+ button11.setText("Birch");
+}else if(theme=="MCPE"){
+ button11.setText("Birch");
+ button11.setBackgroundDrawable(mcpeButtonImage);
+}
+button11.setOnClickListener(new android.view.View.OnClickListener({
+onClick: function(viewarg){
+	setDoor(doorX,doorY,doorZ,228);
+	closeMenu();
+}
+}));
+menuLayout.addView(button11);
+
+var infoTitle = new android.widget.TextView(ctx);
+infoTitle.setTextSize(12);
+infoTitle.setText("\nInfo");//Title
+infoTitle.setTextColor(android.graphics.Color.WHITE); //Color
+infoTitle.setGravity(android.view.Gravity.CENTER);
+
+menuLayout.addView(infoTitle);
+
+var aboutButton = new android.widget.Button(ctx);
+if(theme=="Android"){
+aboutButton.setText("About");
+}else if(theme=="MCPE"){
+aboutButton.setText("About");
+aboutButton.setBackgroundDrawable(mcpeButtonImage);
+}
+aboutButton.setOnClickListener(new android.view.View.OnClickListener({
+	onClick: function(viewarg){
+			var builder = new android.app.AlertDialog.Builder(ctx);
+			builder.setTitle("About");
+			builder.setMessage("Thanks for using HiddenDoors! Mod created by @JovanModPE and @AgameR_Modder");
+			builder.setPositiveButton("Ok", new android.content.DialogInterface.OnClickListener(){
+			 
+			                            onClick: function(p1, p2){
+										
+				p1.cancel();
+				closeMenu();
+										
+										
+			}							
+			 
+		    });
+										
+		var dialog = builder.create();
+		dialog.show();
+	}			
+}));
+menuLayout.addView(aboutButton);
+
+var changelogButton = new android.widget.Button(ctx);
+if(theme=="Android"){
+changelogButton.setText("Changelog");
+}else if(theme=="MCPE"){
+changelogButton.setText("Changelog");
+changelogButton.setBackgroundDrawable(mcpeButtonImage);
+}
+changelogButton.setOnClickListener(new android.view.View.OnClickListener({
+	onClick: function(viewarg){
+			var builder = new android.app.AlertDialog.Builder(ctx);
+			builder.setTitle("Changelog");
+			builder.setMessage("EXAMPLE CHANGELOG");
+			builder.setPositiveButton("Ok", new android.content.DialogInterface.OnClickListener(){
+			 
+			                            onClick: function(p1, p2){
+				p1.cancel();
+				closeMenu();
+										
+										
+			}							
+			 
+		    });
+										
+		var dialog = builder.create();
+		dialog.show();
+	}			
+}));
+menuLayout.addView(changelogButton);
+
+//--------Add CheckBox--------//
+/*var checked5 = false;
+var button5 = new android.widget.CheckBox(ctx);
+button5.setText('Button 5');
+button5.setChecked(checked5);
+button5.setOnClickListener(new android.view.View.OnClickListener({
+onClick: function(viewarg){
+if(!checked5){
+checked5 = true;
+//Your code
+}else{
+checked5 = false;
+//Your code
+}
+button5.setChecked(checked5);
+}
+}));
+menuLayout.addView(button5);*/
+
+//More buttons...
+menu = new android.widget.PopupWindow(menuLayout1, ctx.getWindowManager().getDefaultDisplay().getWidth(), ctx.getWindowManager().getDefaultDisplay().getHeight());
+menu.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.BLACK));
+menu.showAtLocation(ctx.getWindow().getDecorView(), android.view.Gravity.CENTER | android.view.Gravity.TOP, 0, 0);
+}catch(error){
+print('An error occured: ' + error);
+}
+}}));
+}
+
+//Exit button
+function exit(){
+var ctxe = com.mojang.minecraftpe.MainActivity.currentMainActivity.get();
+ctxe.runOnUiThread(new java.lang.Runnable({ run: function(){
+try{
+var xLayout = new android.widget.LinearLayout(ctxe);
+var xButton = new android.widget.Button(ctxe);
+if(theme=="Android"){
+xButton.setText('X');//Text
+xButton.setTextColor(android.graphics.Color.WHITE);
+}else if(theme=="MCPE"){
+xButton.setBackgroundDrawable(mcpeExitButtonImage);
+}
+xButton.setOnClickListener(new android.view.View.OnClickListener({
+onClick: function(viewarg){
+exitUI.dismiss(); //Close
+menu.dismiss(); //Close
+}
+}));
+xLayout.addView(xButton);
+exitUI = new android.widget.PopupWindow(xLayout, dip2px(40), dip2px(40));
+exitUI.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+exitUI.showAtLocation(ctxe.getWindow().getDecorView(), android.view.Gravity.RIGHT | android.view.Gravity.TOP, 0, 0);
+}catch(exception){
+print(exception);
+}
+}}));
+}
+
+function setDoor(x,y,z,doorId){
+	if(getTile(x,y-1,z)==64){
+	setTile(x,y-1,z,doorId,0);
+	}else if(getTile(x,y+1,z)==64){
+	setTile(x,y+1,z,doorId,0);
+	}
+	setTile(x,y,z,doorId,0);
+}
+
+function closeMenu(){
+var ctxe = com.mojang.minecraftpe.MainActivity.currentMainActivity.get();
+ctxe.runOnUiThread(new java.lang.Runnable({ run: function(){
+try{
+exitUI.dismiss(); //Close
+menu.dismiss(); //Close
+}catch(exception){
+print(exception);
+};
+}
+}
+));
+}
+
+//Hidden Doors Blocks
+
+var blockIds=[255,254,253,252,251,264,249,248,242,241,240,239,238,237,236,235,234,233,232,231,230,229,228,227,226,225];
+
+
+//bookshelf
+
+Block.defineBlock(255,"Hidden Bookshelf Door",["bookshelf",0],64,false);
+Block.setShape(255,0,0,0,1,1,3/16);
+Block.setDestroyTime(255,2.5);
+
+Block.defineBlock(254,"Hidden Bookshelf Door",["bookshelf",0],64,false);
+Block.setShape(254,0,0,0,3/16,1,1);
+Block.setDestroyTime(254,2.5); Block.setLightOpacity(255,0.00001);
+Block.setLightOpacity(254,0.00001);
+
+
+
+
+
+//log
+
+Block.defineBlock(253,"Hidden Oak Door",["log",0],64,false);
+Block.setShape(253,0,0,0,1,1,3/16);
+
+Block.setDestroyTime(253,2.5);
+Block.defineBlock(252,"Hidden Oak Door",["log",0],64,false);
+Block.setShape(252,0,0,0,3/16,1,1);
+Block.setDestroyTime(252,2.5); Block.setLightOpacity(253,0.00001);
+Block.setLightOpacity(252,0.00001);
+
+
+
+
+//dirt
+
+Block.defineBlock(251,"Hidden Dirt Door",["dirt",0],64,false);
+Block.setShape(251,0,0,0,1,1,3/16);
+
+
+Block.defineBlock(250,"Hidden Dirt Door",["dirt",0],64,false);
+Block.setShape(250,0,0,0,3/16,1,1);
+Block.setDestroyTime(251,2.5);
+Block.setDestroyTime(250,2.5); Block.setLightOpacity(251,0.00001);
+Block.setLightOpacity(250,0.00001);
+
+
+
+//cobble
+
+Block.defineBlock(249,"Hidden Cobble Door",["cobblestone",0],64,false);
+Block.setShape(249,0,0,0,1,1,3/16);
+Block.setDestroyTime(249,2.5);
+
+Block.defineBlock(248,"Hidden Cobble Door",["cobblestone",0],64,false);
+Block.setShape(248,0,0,0,3/16,1,1);
+Block.setDestroyTime(248,2.5); Block.setLightOpacity(249,0.00001);
+Block.setLightOpacity(248,0.00001);
+
+
+
+
+
+//brick
+
+Block.defineBlock(242,"Hidden Brick Door",["stonebrick",0],64,false);
+Block.setShape(242,0,0,0,1,1,3/16);
+Block.setDestroyTime(242,2.5);
+
+Block.defineBlock(241,"Hidden Brick Door",["stonebrick",0],64,false);
+Block.setShape(241,0,0,0,3/16,1,1);
+Block.setDestroyTime(241,2.5); Block.setLightOpacity(242,0.00001);
+Block.setLightOpacity(241,0.00001);
+
+
+
+
+
+//
+
+Block.defineBlock(240,"Hidden Brick Door",["brick",0],64,false);
+Block.setShape(240,0,0,0,1,1,3/16);
+
+Block.setDestroyTime(240,2.5);
+Block.defineBlock(239,"Hidden Brick Door",["brick",0],64,false);
+Block.setShape(239,0,0,0,3/16,1,1);
+Block.setDestroyTime(239,2.5); Block.setLightOpacity(240,0.00001);
+Block.setLightOpacity(239,0.00001);
+
+
+
+
+
+
+//quartz
+
+
+Block.defineBlock(238,"Hidden Quartz Door",["quartz_block",0],64,false);
+Block.setShape(238,0,0,0,1,1,3/16);
+
+Block.setDestroyTime(238,2.5);
+Block.defineBlock(237,"Hidden Quartz Door",["quartz_block",0],64,false);
+Block.setShape(237,0,0,0,3/16,1,1);
+Block.setDestroyTime(237,2.5); Block.setLightOpacity(238,0.00001);
+Block.setLightOpacity(237,0.00001);
+
+
+
+
+
+
+
+
+//planks
+
+
+Block.defineBlock(236,"Hidden Plank Door",["planks",0],64,false);
+Block.setShape(236,0,0,0,1,1,3/16);
+Block.setDestroyTime(236,2.5);
+
+Block.defineBlock(235,"Hidden Plank Door",["planks",0],64,false);
+Block.setShape(235,0,0,0,3/16,1,1);
+Block.setDestroyTime(235,2.5); Block.setLightOpacity(236,0.00001);
+Block.setLightOpacity(235,0.00001);
+
+
+
+
+
+
+
+//obsidian
+
+Block.defineBlock(234,"Hidden Obsidian Door",["obsidian",0],64,false);
+Block.setShape(234,0,0,0,1,1,3/16);
+
+Block.setDestroyTime(234,2.5);
+Block.defineBlock(233,"Hidden Obsidian Door",["obsidian",0],64,false);
+Block.setShape(233,0,0,0,3/16,1,1);
+Block.setDestroyTime(233,2.5); Block.setLightOpacity(234,0.00001);
+Block.setLightOpacity(233,0.00001);
+
+
+
+//stone
+
+Block.defineBlock(232,"Hidden Stone Door",["stone",0],64,false);
+Block.setShape(232,0,0,0,1,1,3/16);
+
+Block.setDestroyTime(232,2.5);
+Block.defineBlock(231,"Hidden Stone Door",["stone",0],64,false);
+Block.setShape(231,0,0,0,3/16,1,1);
+Block.setDestroyTime(231,2.5); Block.setLightOpacity(232,0.00001);
+Block.setLightOpacity(231,0.00001);
+
+
+
+
+
+//log 2
+
+
+Block.defineBlock(230,"Hidden Log Door",["log",2],64,false);
+Block.setShape(230,0,0,0,1,1,3/16);
+
+Block.setDestroyTime(230,2.5);
+Block.defineBlock(229,"Hidden Log Door",["log",2],64,false);
+Block.setShape(229,0,0,0,3/16,1,1);
+Block.setDestroyTime(229,2.5); Block.setLightOpacity(230,0.00001);
+Block.setLightOpacity(229,0.00001);
+
+
+
+
+
+//log 4
+
+
+Block.defineBlock(228,"Hidden Log Door",["log",4],64,false);
+Block.setShape(228,0,0,0,1,1,3/16);
+
+Block.setDestroyTime(228,2.5);
+Block.defineBlock(227,"Hidden Log Door",["log",4],64,false);
+Block.setShape(227,0,0,0,3/16,1,1);
+Block.setDestroyTime(227,2.5); Block.setLightOpacity(228,0.00001);
+Block.setLightOpacity(227,0.00001);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//DOOR FUNCTIONALITY
+
+
+function useItem(x,y,z,i,b,s,id,bd){
+if(i==460){
+Level.addParticle(ParticleType.redstone,x,y+1,z,0,0,0,5);
+Level.addParticle(ParticleType.redstone,x,y+2,z,0,0,0,5);
+Level.addParticle(ParticleType.redstone,x,y+1,z,1,1,1,5);
+if(b==64){
+doorX = x;
+doorY = y;
+doorZ = z;
+preventDefault();
+openDoorChooseMenu();
+exit();
+}
+
+/*if(b==49){
+Level.setTile(x,y+1,z,234,0);
+Level.setTile(x,y+2,z,234,0);
+}
+
+if(b==3){
+Level.setTile(x,y+1,z,251,0);
+Level.setTile(x,y+2,z,251,0);
+}
+
+if(b==5){
+Level.setTile(x,y+1,z,236,0);
+Level.setTile(x,y+2,z,236,0);
+}
+
+if(b==17){
+if(bd==0){
+Level.setTile(x,y+1,z,253,0);
+Level.setTile(x,y+2,z,253,0);
+}
+if(bd==1){
+Level.setTile(x,y+1,z,230,0);
+Level.setTile(x,y+2,z,230,0);
+}
+if(bd==2){
+Level.setTile(x,y+1,z,228,0);
+Level.setTile(x,y+2,z,228,0);
+}
+}
+
+
+
+
+if(b==45){
+Level.setTile(x,y+1,z,240,0);
+Level.setTile(x,y+2,z,240,0);
+}
+
+if(b==47){
+Level.setTile(x,y+1,z,255,0);
+Level.setTile(x,y+2,z,255,0);
+}
+
+if(b==98){
+Level.setTile(x,y+1,z,242,0);
+Level.setTile(x,y+2,z,242,0);
+}
+
+if(b==155){
+Level.setTile(x,y+1,z,238,0);
+Level.setTile(x,y+2,z,238,0);
+}
+
+if(b==4){
+Level.setTile(x,y+1,z,249,0);
+Level.setTile(x,y+2,z,249,0);
+}
+
+if(b==1){
+Level.setTile(x,y+1,z,232,0);
+Level.setTile(x,y+2,z,232,0);
+}*/
+}
+
+
+
+
+
+
+
+
+
+//bookshelf
+if(b==254){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,255,0);
+if(Level.getTile(x,y+1,z)==254){
+Level.setTile(x,y+1,z,255,0);
+}
+if(Level.getTile(x,y-1,z)==254){
+Level.setTile(x,y-1,z,255,0);
+}
+}
+if(b==255){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,254,0);
+if(Level.getTile(x,y+1,z)==255){
+Level.setTile(x,y+1,z,254,0);
+}
+if(Level.getTile(x,y-1,z)==255){
+Level.setTile(x,y-1,z,254,0);
+}
+}
+
+
+
+
+//log
+
+if(b==253){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,252,0);
+if(Level.getTile(x,y+1,z)==253){
+Level.setTile(x,y+1,z,252,0);
+}
+if(Level.getTile(x,y-1,z)==253){
+Level.setTile(x,y-1,z,252,0);
+}
+}
+if(b==252){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,253,0);
+if(Level.getTile(x,y+1,z)==252){
+Level.setTile(x,y+1,z,253,0);
+}
+if(Level.getTile(x,y-1,z)==252){
+Level.setTile(x,y-1,z,253,0);
+}
+}
+
+
+//Dirt
+
+if(b==251){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,250,0);
+if(Level.getTile(x,y+1,z)==251){
+Level.setTile(x,y+1,z,250,0);
+}
+if(Level.getTile(x,y-1,z)==251){
+Level.setTile(x,y-1,z,250,0);
+}
+}
+if(b==250){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,251,0);
+if(Level.getTile(x,y+1,z)==250){
+Level.setTile(x,y+1,z,251,0);
+}
+if(Level.getTile(x,y-1,z)==250){
+Level.setTile(x,y-1,z,251,0);
+}
+}
+
+
+
+//Cobble
+
+if(b==249){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,248,0);
+if(Level.getTile(x,y+1,z)==249){
+Level.setTile(x,y+1,z,248,0);
+}
+if(Level.getTile(x,y-1,z)==249){
+Level.setTile(x,y-1,z,248,0);
+}
+}
+if(b==248){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,249,0);
+if(Level.getTile(x,y+1,z)==248){
+Level.setTile(x,y+1,z,249,0);
+}
+if(Level.getTile(x,y-1,z)==248){
+Level.setTile(x,y-1,z,249,0);
+}
+}
+
+
+
+
+
+//brick
+
+if(b==242){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,241,0);
+if(Level.getTile(x,y+1,z)==242){
+Level.setTile(x,y+1,z,241,0);
+}
+if(Level.getTile(x,y-1,z)==242){
+Level.setTile(x,y-1,z,241,0);
+}
+}
+if(b==241){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,242,0);
+if(Level.getTile(x,y+1,z)==241){
+Level.setTile(x,y+1,z,242,0);
+}
+if(Level.getTile(x,y-1,z)==241){
+Level.setTile(x,y-1,z,242,0);
+}
+}
+
+
+
+
+//stonebrick
+
+if(b==240){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,239,0);
+if(Level.getTile(x,y+1,z)==240){
+Level.setTile(x,y+1,z,239,0);
+}
+if(Level.getTile(x,y-1,z)==240){
+Level.setTile(x,y-1,z,239,0);
+}
+}
+if(b==239){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,240,0);
+if(Level.getTile(x,y+1,z)==239){
+Level.setTile(x,y+1,z,240,0);
+}
+if(Level.getTile(x,y-1,z)==239){
+Level.setTile(x,y-1,z,240,0);
+}
+}
+
+
+
+//quartz
+
+if(b==238){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,237,0);
+if(Level.getTile(x,y+1,z)==238){
+Level.setTile(x,y+1,z,237,0);
+}
+if(Level.getTile(x,y-1,z)==238){
+Level.setTile(x,y-1,z,237,0);
+}
+}
+if(b==237){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,238,0);
+if(Level.getTile(x,y+1,z)==237){
+Level.setTile(x,y+1,z,238,0);
+}
+if(Level.getTile(x,y-1,z)==237){
+Level.setTile(x,y-1,z,238,0);
+}
+}
+
+
+
+
+//planks
+
+if(b==236){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,235,0);
+if(Level.getTile(x,y+1,z)==236){
+Level.setTile(x,y+1,z,235,0);
+}
+if(Level.getTile(x,y-1,z)==236){
+Level.setTile(x,y-1,z,235,0);
+}
+}
+if(b==235){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,236,0);
+if(Level.getTile(x,y+1,z)==235){
+Level.setTile(x,y+1,z,236,0);
+}
+if(Level.getTile(x,y-1,z)==235){
+Level.setTile(x,y-1,z,236,0);
+}
+}
+
+
+
+
+//obsidian
+
+if(b==234){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,233,0);
+if(Level.getTile(x,y+1,z)==234){
+Level.setTile(x,y+1,z,233,0);
+}
+if(Level.getTile(x,y-1,z)==234){
+Level.setTile(x,y-1,z,233,0);
+}
+}
+if(b==233){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,234,0);
+if(Level.getTile(x,y+1,z)==233){
+Level.setTile(x,y+1,z,234,0);
+}
+if(Level.getTile(x,y-1,z)==233){
+Level.setTile(x,y-1,z,234,0);
+}
+}
+
+
+
+
+
+//stone
+
+if(b==232){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,231,0);
+if(Level.getTile(x,y+1,z)==232){
+Level.setTile(x,y+1,z,231,0);
+}
+if(Level.getTile(x,y-1,z)==232){
+Level.setTile(x,y-1,z,231,0);
+}
+}
+if(b==231){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,232,0);
+if(Level.getTile(x,y+1,z)==231){
+Level.setTile(x,y+1,z,232,0);
+}
+if(Level.getTile(x,y-1,z)==231){
+Level.setTile(x,y-1,z,232,0);
+}
+}
+
+
+
+
+
+//Spruce
+
+if(b==230){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,229,0);
+if(Level.getTile(x,y+1,z)==230){
+Level.setTile(x,y+1,z,229,0);
+}
+if(Level.getTile(x,y-1,z)==230){
+Level.setTile(x,y-1,z,229,0);
+}
+}
+if(b==229){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,230,0);
+if(Level.getTile(x,y+1,z)==229){
+Level.setTile(x,y+1,z,230,0);
+}
+if(Level.getTile(x,y-1,z)==229){
+Level.setTile(x,y-1,z,230,0);
+}
+}
+
+
+
+
+
+//birch
+
+if(b==228){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,227,0);
+if(Level.getTile(x,y+1,z)==228){
+Level.setTile(x,y+1,z,227,0);
+}
+if(Level.getTile(x,y-1,z)==228){
+Level.setTile(x,y-1,z,227,0);
+}
+}
+if(b==227){
+Level.playSound(x,y,z,"random.door_open",64,64);
+Level.setTile(x,y,z,228,0);
+if(Level.getTile(x,y+1,z)==227){
+Level.setTile(x,y+1,z,228,0);
+}
+if(Level.getTile(x,y-1,z)==227){
+Level.setTile(x,y-1,z,228,0);
+}
+}
+
+
+
+
+
+
+
+
+
+}
+
+
+
+ModPE.setItem(460,"door_iron",0,"Universal Door",1);
+Player.addItemCreativeInv(460,1,0);
+
+
+
+function destroyBlock(x,y,z,s){
+
+var b0=Level.getTile(x,y,z);
+var b1=Level.getTile(x,y+1,z);
+var b2=Level.getTile(x,y-1,z);
+ 
+if(blockIds.indexOf(b0)>=0){
+Level.dropItem(x,y+1,z,0,324,1,0);
+Level.destroyBlock(x,y,z);
+if(blockIds.indexOf(b1)>=0){
+Level.destroyBlock(x,y+1,z);
+}
+if(blockIds.indexOf(b2)>=0){
+Level.destroyBlock(x,y-1,z);
+}
+}
+}
+
+
+
+Item.addShapedRecipe(460,1,0,[" x ","xyx"," x "],["x",331,0,"y",324,0]);
