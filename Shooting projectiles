@@ -1,0 +1,49 @@
+var snowball;
+
+
+
+function newLevel(){
+
+
+activity.runOnUiThread(new java.lang.Runnable({ run: function() {  
+        try { 
+          buttonWindow = new android.widget.PopupWindow();
+          var layout = new android.widget.RelativeLayout(activity);
+          var button = new android.widget.Button(activity);
+          button.setText("Dig");
+          button.setOnClickListener(new android.view.View.OnClickListener({
+                onClick: function(viewarg) { 
+                //The function() comes from activity.runOnUiThread()
+
+
+p=((Entity.getPitch(getPlayerEnt())+90)*Math.PI)/180; 
+            var y=((Entity.getYaw(getPlayerEnt())+90)*Math.PI)/180; 
+var xx=Math.sin(p)*Math.cos(y); 
+var yy=Math.sin(p)*Math.sin(y); 
+var zz=Math.cos(p);
+snowball= Level.spawnMob(Player.getX()+xx,Player.getY()+zz,Player.getZ()+yy ,81);
+setVelX(snowball,xx);
+setVelY(snowball,zz);
+setVelZ(snowball,yy);
+                
+//set it's speed by multiplying xx,yy,zz
+//example : (snowball,2*xx);
+
+  
+
+}
+          }));
+          layout.addView(button);
+          buttonWindow.setContentView(layout);
+          buttonWindow.setWidth(android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT);
+          buttonWindow.setHeight(android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT);
+          buttonWindow.setBackgroundDrawable(new
+android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+          buttonWindow.showAtLocation(activity.getWindow().getDecorView(), android.view.Gravity.RIGHT | android.view.Gravity.CENTER,0,0);
+          
+        }catch(problem){
+          print("Button could not be displayed: " + problem); 
+        }
+  }}));
+
+} 
